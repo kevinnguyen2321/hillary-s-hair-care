@@ -1,0 +1,74 @@
+
+As a user, I want to view all stylists, so that I
+can see which stylists are in the system.
+GIVEN a user is viewing the website
+WHEN they click on "Stylists" on the navbar
+THEN they will be navigated to the stylists page view
+where they can view all active stylists.
+
+
+As a user, I want to book an appointment with a stylist
+GIVEN a user is viewing web site
+WHEN they click the "Book appointment" on the nav bar
+THEN they are presented with a form to book a new appointment with a stylist
+(user can select a stylist from the dropdown menu)
+& List of services to choose from a drop down menu
+GIVEN a user has filled out the new appointment
+WHEN they click the "Book appointment" button
+THEN the appointment is added to the system, and the user is navgated to the "appointments"
+page view.
+
+
+As a user, I want to view all appointments, so that I can see which appointments are in the system.
+GIVEN a user is navigating to the site
+WHEN they click on "Appointments" on the nav bar
+THEN they should be navigated to the "Appointments" page view to see all the appointments.
+
+As a user, I want to view details about an appointment, so that I can see which stylist and total cost of
+appointment will be
+GIVEN a user is navigating to the site and is on the Appointments page
+WHEN they click on  details for a given Appointment
+THEN they should be navigated to the Appointment detail page view to see more specific details about
+that appointment
+
+As a user, I want to cancel an appointment
+GIVEN a user is navigating to the site
+and a user is on the Appointments page
+WHEN they are on click on details for a certain appointment and click on the "Cancel appointment button"
+THEN the appointment should be removed from database and 
+they should be navigated to the "Appointments" page view to see all the appointments.
+
+As a user, I want to change some services to an existing appointment
+GIVEN a user is navigating to the site
+and a user is on the Appointments page
+WHEN they are on click on details for a certain appointment and click on the "Edit appointment button"
+THEN the user can edit any changes to an appointment and once a user clicks "Save"
+they should be navigated to the "Appointments" page view to see all the appointments.
+
+As a user, I want to add a new customer to the database
+GIVEN a user is navigating to the site
+WHEN they are on click on "Customers" they should be navigated to the customer page view
+once user clicks on "Add new customer"
+THEN a form will appear where the user can fill out to add a new customer to the system
+they should be navigated to the "Customer" page view to see all the customers after clicking
+"Add new customer".
+
+
+
+As a user, I want to add a new stylists to the database
+GIVEN a user is navigating to the site
+WHEN they are on click on "Stylists" they should be navigated to the stylists page view
+once user clicks on "Add new stylist"
+THEN a form will appear where the user can fill out to add a new stylist to the system
+they should be navigated to the "Stylist" page view to see all the stylists after clicking
+"Add new stylist".
+
+As a user, I want to remove a stylists from the database
+GIVEN a user is navigating to the site
+WHEN they are on click on "Stylists" they should be navigated to the stylists page view
+once user clicks on "Remove Stylist"
+THEN the stylist will be removed as an active stylist in the database
+they should be navigated to the "Stylist" page view to see all the stylists after clicking
+"Remove stylist".
+
+

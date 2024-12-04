@@ -63,6 +63,35 @@ app.MapPut("/api/stylists/{id}/deactivate", (HillaryHairCareDbContext db, int id
 
 });
 
+app.MapGet("/api/appointments", (HillaryHairCareDbContext db) => {
+  return db.Appointments
+  .Include(a => a.Customer)
+  .Include(a => a.Stylist)
+  .Where(a => !a.Canceled)
+  .Select(a => new AppointmentDTO
+  {
+    Id = a.Id,
+    CustomerId = a.CustomerId,
+    Customer = new CustomerDTO
+    {
+      Id = a.Customer.Id,
+      Name = a.Customer.Name
+    },
+    StylistId = a.StylistId,
+    Stylist = new StylistDTO
+    {
+      Id = a.Stylist.Id,
+      Name = a.Stylist.Name,
+      IsActive = a.Stylist.IsActive
+    },
+    TotalPrice = a.TotalPrice,
+    Canceled = a.Canceled,
+    ScheduledTime = a.ScheduledTime
+  }
+  ).ToList();
+
+});
+
 
 
 
