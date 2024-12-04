@@ -41,6 +41,14 @@ app.MapGet("/api/stylists", (HillaryHairCareDbContext db) => {
    }).ToList();
 });
 
+app.MapPost("/api/stylists", (HillaryHairCareDbContext db, Stylist stylist) => {
+  stylist.IsActive = true;
+  db.Stylists.Add(stylist);
+  db.SaveChanges();
+  return Results.Created($"/api/stylists/{stylist.Id}", stylist);
+
+});
+
 
 
 
