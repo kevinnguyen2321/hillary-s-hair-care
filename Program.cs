@@ -49,6 +49,20 @@ app.MapPost("/api/stylists", (HillaryHairCareDbContext db, Stylist stylist) => {
 
 });
 
+app.MapPut("/api/stylists/{id}/deactivate", (HillaryHairCareDbContext db, int id)=> {
+  Stylist foundStylist = db.Stylists.FirstOrDefault(s => s.Id == id);
+
+  if (foundStylist == null)
+  {
+    return Results.NotFound();
+  }
+
+ foundStylist.IsActive = false;
+  db.SaveChanges();
+  return Results.NoContent();
+
+});
+
 
 
 
