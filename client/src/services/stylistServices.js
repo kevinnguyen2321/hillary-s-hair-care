@@ -16,3 +16,17 @@ export const addNewStylist = (stylistObj) => {
     return response.json();
   });
 };
+
+export const deactivateStylist = (id) => {
+  return fetch(`/api/stylists/${id}/deactivate`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }).then((response) => {
+    if (!response.ok) {
+      throw new Error('Failed to deactivate stylist');
+    }
+    return response.status;
+  });
+};
