@@ -4,6 +4,7 @@ import { Home } from './home/Home';
 import { Stylists } from './stylists/Stylists';
 import { NewStylistForm } from './stylists/NewStylistForm';
 import { AppointmentsList } from './appointments/AppointmentsList';
+import { AppointmentDetails } from './appointments/AppointmentDetails';
 
 function App() {
   return (
@@ -16,7 +17,10 @@ function App() {
             <Route index element={<Stylists />} />
             <Route path="new" element={<NewStylistForm />} />
           </Route>
-          <Route path="appointments" element={<AppointmentsList />} />
+          <Route path="appointments">
+            <Route index element={<AppointmentsList />} />
+            <Route path=":appointmentId" element={<AppointmentDetails />} />
+          </Route>
         </Route>
       </Routes>
     </>

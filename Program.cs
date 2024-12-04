@@ -67,6 +67,7 @@ app.MapGet("/api/appointments", (HillaryHairCareDbContext db) => {
   return db.Appointments
   .Include(a => a.Customer)
   .Include(a => a.Stylist)
+  .Include(a => a.AppointmentServices)
   .Where(a => !a.Canceled)
   .Select(a => new AppointmentDTO
   {
@@ -84,13 +85,79 @@ app.MapGet("/api/appointments", (HillaryHairCareDbContext db) => {
       Name = a.Stylist.Name,
       IsActive = a.Stylist.IsActive
     },
-    TotalPrice = a.TotalPrice,
     Canceled = a.Canceled,
-    ScheduledTime = a.ScheduledTime
+    ScheduledTime = a.ScheduledTime,
+    AppointmentServices = a.AppointmentServices.Select(aps => new AppointmentServiceDTO
+    {
+      Service = new ServiceDTO
+      {
+        Id = aps.Service.Id,
+        Name = aps.Service.Name,
+        Price = aps.Service.Price
+      }
+
+    }
+    ).ToList()
   }
   ).ToList();
 
 });
+
+
+app.MapGet("/api/appointments/{id}", (HillaryHairCareDbContext db, int id)=> {
+  Appointment foundAppt = db.Appointments
+      .Include(a => a.Customer)
+      .Include(a => a.Stylist)
+      .Include(a => a.AppointmentServices)
+      .ThenInclude(aps => aps.Service)
+      .FirstOrDefault(a => a.Id == id);
+
+  if (foundAppt == null)
+  {
+    return Results.NotFound();
+  }
+
+  return Results.Ok(new AppointmentDTO
+  {
+    Id = foundAppt.Id,
+    CustomerId = foundAppt.CustomerId,
+    Customer = new CustomerDTO
+    {
+      Id = foundAppt.Customer.Id,
+      Name = foundAppt.Customer.Name,
+
+    },
+    StylistId = foundAppt.StylistId,
+    Stylist = new StylistDTO
+    {
+      Id = foundAppt.Stylist.Id,
+      Name = foundAppt.Stylist.Name,
+      IsActive = foundAppt.Stylist.IsActive,
+    },
+    Canceled = foundAppt.Canceled,
+    ScheduledTime = foundAppt.ScheduledTime,
+    AppointmentServices = foundAppt.AppointmentServices.Select(aps => new AppointmentServiceDTO
+    {
+      ServiceId = aps.ServiceId,
+      Service = new ServiceDTO
+      {
+        Id = aps.Service.Id,
+        Name = aps.Service.Name,
+        Price = aps.Service.Price
+      }
+
+    }).ToList()
+
+  }
+  );
+
+
+
+
+
+});
+
+
 
 
 
