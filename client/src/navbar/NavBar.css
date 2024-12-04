@@ -1,0 +1,15 @@
+.navbar-wrapper {
+  border: solid black;
+}
+
+.navbar-wrapper ul {
+  display: flex;
+  justify-content: space-around;
+  list-style: none;
+  font-size: 1.5rem;
+}
+
+.navbar-wrapper ul a {
+  text-decoration: none;
+  color: inherit;
+}
