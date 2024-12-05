@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.Json;
 using HillaryHairCare.Models.DTOs;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -252,6 +253,23 @@ app.MapPut("/api/appointments/{id}", (int id, HillaryHairCareDbContext db, Appoi
     
 
     return Results.NoContent();
+});
+
+
+app.MapPut("/api/appointments/{id}/cancel", (HillaryHairCareDbContext db, int id) =>{
+  Appointment foundAppointment = db.Appointments.FirstOrDefault(a => a.Id == id);
+  if (foundAppointment == null)
+  {
+    return Results.NotFound();
+  }
+
+  foundAppointment.Canceled = true;
+
+  db.SaveChanges();
+
+  return Results.NoContent();
+
+
 });
 
 
