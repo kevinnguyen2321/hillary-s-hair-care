@@ -20,3 +20,18 @@ export const bookAppointment = (appointmentObj) => {
     return response.json();
   });
 };
+
+export const updateAppointment = (id, appointmentObj) => {
+  return fetch(`/api/appointments/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(appointmentObj),
+  }).then((response) => {
+    if (!response.ok) {
+      throw new Error('Failed to add appointment');
+    }
+    return;
+  });
+};

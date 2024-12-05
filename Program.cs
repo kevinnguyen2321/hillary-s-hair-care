@@ -156,51 +156,7 @@ app.MapGet("/api/appointments/{id}", (HillaryHairCareDbContext db, int id)=> {
 });
 
 
-// app.MapPost("/api/appointments", (HillaryHairCareDbContext db, Appointment appointment)=> {
-//  appointment.ScheduledTime = DateTime.Now;
-  
-//   db.Appointments.Add(appointment);
 
-//  foreach (AppointmentService aps in appointment.AppointmentServices)
-//  {
-//    aps.AppointmentId = appointment.Id;
-    
-//     db.AppointmentServices.Add(aps);
-
-//  }
-
-//  db.SaveChanges();
-
-//   // Load related Service data for the response
-//     foreach (var aps in appointment.AppointmentServices)
-//     {
-//         aps.Service = db.Services.FirstOrDefault(s => s.Id == aps.ServiceId);
-//     }
-
-//   return Results.Created($"/api/appointments/{appointment.Id}", new AppointmentDTO
-//   {
-//     Id = appointment.Id,
-//     CustomerId = appointment.CustomerId,
-//     StylistId = appointment.StylistId,
-//     ScheduledTime = appointment.ScheduledTime,
-//     AppointmentServices = appointment.AppointmentServices.Select(aps => new AppointmentServiceDTO
-//     {
-//       Id = aps.Id,
-//       ServiceId = aps.ServiceId,
-//       Service = aps.Service != null ? new ServiceDTO
-//       {
-//         Id = aps.Service.Id,
-//         Name = aps.Service.Name,
-//         Price = aps.Service.Price
-//       } : null
-
-//     }
-//     ).ToList()
-
-//   });
-
-
-// });
 
 app.MapPost("/api/appointments", (HillaryHairCareDbContext db, Appointment appointment) =>
 {
@@ -263,6 +219,41 @@ app.MapGet("/api/services", (HillaryHairCareDbContext db)=> {
    }
    ).ToList();
 });
+
+
+app.MapPut("/api/appointments/{id}", (int id, HillaryHairCareDbContext db, Appointment updatedAppointment) =>
+{
+    var existingAppointment = db.Appointments
+        .Include(a => a.AppointmentServices)
+        .FirstOrDefault(a => a.Id == id);
+
+    if (existingAppointment == null)
+    {
+        return Results.NotFound("Appointment not found.");
+    }
+
+   
+    existingAppointment.CustomerId = updatedAppointment.CustomerId;
+    existingAppointment.StylistId = updatedAppointment.StylistId;
+    existingAppointment.ScheduledTime = updatedAppointment.ScheduledTime;
+
+    // Remove existing AppointmentServices
+    db.AppointmentServices.RemoveRange(existingAppointment.AppointmentServices);
+
+    // Add new AppointmentServices
+    foreach (var aps in updatedAppointment.AppointmentServices)
+    {
+        aps.AppointmentId = id; // Ensure AppointmentId is set
+        db.AppointmentServices.Add(aps);
+    }
+
+    db.SaveChanges();
+
+    
+
+    return Results.NoContent();
+});
+
 
 
 
