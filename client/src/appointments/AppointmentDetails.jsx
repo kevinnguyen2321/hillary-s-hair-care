@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getAppointmentById } from '../services/appointmentServices';
 
 export const AppointmentDetails = () => {
@@ -8,6 +8,8 @@ export const AppointmentDetails = () => {
   });
 
   const { appointmentId } = useParams();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     getAppointmentById(appointmentId).then((data) => setAppointment(data));
@@ -21,6 +23,10 @@ export const AppointmentDetails = () => {
       return `${aps.service.name} ($${aps.service.price}) `;
     }
   });
+
+  const handleEditApptClick = (apptId) => {
+    navigate(`/appointments/edit/${apptId}`);
+  };
 
   return (
     <div>
@@ -46,6 +52,13 @@ export const AppointmentDetails = () => {
       <p>
         <strong>Total cost:</strong>${appointment.totalPrice}
       </p>
+
+      <div>
+        <button onClick={() => handleEditApptClick(appointmentId)}>
+          Edit Appointment
+        </button>{' '}
+        <button>Cancel Appointment</button>
+      </div>
     </div>
   );
 };

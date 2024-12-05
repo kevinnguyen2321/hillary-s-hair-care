@@ -6,6 +6,7 @@ import { NewStylistForm } from './stylists/NewStylistForm';
 import { AppointmentsList } from './appointments/AppointmentsList';
 import { AppointmentDetails } from './appointments/AppointmentDetails';
 import { NewAppointmentForm } from './appointments/NewAppointmentForm';
+import { EditAppointment } from './appointments/EditAppointment';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route index element={<AppointmentsList />} />
             <Route path=":appointmentId" element={<AppointmentDetails />} />
             <Route path="book" element={<NewAppointmentForm />} />
+            <Route path="edit/:appointmentId" element={<EditAppointment />} />
           </Route>
         </Route>
       </Routes>
