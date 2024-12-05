@@ -35,3 +35,17 @@ export const updateAppointment = (id, appointmentObj) => {
     return;
   });
 };
+
+export const cancelAppointment = (id) => {
+  return fetch(`/api/appointments/${id}/cancel`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }).then((response) => {
+    if (!response.ok) {
+      throw new Error('Failed to deactivate stylist');
+    }
+    return response.status;
+  });
+};

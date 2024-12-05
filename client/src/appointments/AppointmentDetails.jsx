@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getAppointmentById } from '../services/appointmentServices';
+import {
+  cancelAppointment,
+  getAppointmentById,
+} from '../services/appointmentServices';
 
 export const AppointmentDetails = () => {
   const [appointment, setAppointment] = useState({
@@ -26,6 +29,10 @@ export const AppointmentDetails = () => {
 
   const handleEditApptClick = (apptId) => {
     navigate(`/appointments/edit/${apptId}`);
+  };
+
+  const handleCancelBtnClick = (apptId) => {
+    cancelAppointment(apptId).then(() => navigate('/appointments'));
   };
 
   return (
@@ -57,7 +64,9 @@ export const AppointmentDetails = () => {
         <button onClick={() => handleEditApptClick(appointmentId)}>
           Edit Appointment
         </button>{' '}
-        <button>Cancel Appointment</button>
+        <button onClick={() => handleCancelBtnClick(appointmentId)}>
+          Cancel Appointment
+        </button>
       </div>
     </div>
   );
