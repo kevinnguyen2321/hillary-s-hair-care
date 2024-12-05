@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.Json;
 using HillaryHairCare.Models.DTOs;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
 
 
 // allows passing datetimes without time zone data 
@@ -150,12 +153,121 @@ app.MapGet("/api/appointments/{id}", (HillaryHairCareDbContext db, int id)=> {
 
   }
   );
-
-
-
-
-
 });
+
+
+// app.MapPost("/api/appointments", (HillaryHairCareDbContext db, Appointment appointment)=> {
+//  appointment.ScheduledTime = DateTime.Now;
+  
+//   db.Appointments.Add(appointment);
+
+//  foreach (AppointmentService aps in appointment.AppointmentServices)
+//  {
+//    aps.AppointmentId = appointment.Id;
+    
+//     db.AppointmentServices.Add(aps);
+
+//  }
+
+//  db.SaveChanges();
+
+//   // Load related Service data for the response
+//     foreach (var aps in appointment.AppointmentServices)
+//     {
+//         aps.Service = db.Services.FirstOrDefault(s => s.Id == aps.ServiceId);
+//     }
+
+//   return Results.Created($"/api/appointments/{appointment.Id}", new AppointmentDTO
+//   {
+//     Id = appointment.Id,
+//     CustomerId = appointment.CustomerId,
+//     StylistId = appointment.StylistId,
+//     ScheduledTime = appointment.ScheduledTime,
+//     AppointmentServices = appointment.AppointmentServices.Select(aps => new AppointmentServiceDTO
+//     {
+//       Id = aps.Id,
+//       ServiceId = aps.ServiceId,
+//       Service = aps.Service != null ? new ServiceDTO
+//       {
+//         Id = aps.Service.Id,
+//         Name = aps.Service.Name,
+//         Price = aps.Service.Price
+//       } : null
+
+//     }
+//     ).ToList()
+
+//   });
+
+
+// });
+
+app.MapPost("/api/appointments", (HillaryHairCareDbContext db, Appointment appointment) =>
+{
+    // Validate ScheduledTime
+    if (appointment.ScheduledTime.Minute != 0 || appointment.ScheduledTime.Second != 0)
+    {
+        return Results.BadRequest("Appointments must start on the hour.");
+    }
+    if (appointment.ScheduledTime < DateTime.Now)
+    {
+        return Results.BadRequest("Appointments cannot be scheduled in the past.");
+    }
+
+    // Add the appointment
+    db.Appointments.Add(appointment);
+
+    // Add AppointmentServices
+    foreach (AppointmentService aps in appointment.AppointmentServices)
+    {
+        aps.AppointmentId = appointment.Id;
+        db.AppointmentServices.Add(aps);
+    }
+
+    db.SaveChanges();
+
+    // Load related Service data for the response
+    foreach (var aps in appointment.AppointmentServices)
+    {
+        aps.Service = db.Services.FirstOrDefault(s => s.Id == aps.ServiceId);
+    }
+
+    return Results.Created($"/api/appointments/{appointment.Id}", new AppointmentDTO
+    {
+        Id = appointment.Id,
+        CustomerId = appointment.CustomerId,
+        StylistId = appointment.StylistId,
+        ScheduledTime = appointment.ScheduledTime,
+        AppointmentServices = appointment.AppointmentServices.Select(aps => new AppointmentServiceDTO
+        {
+            Id = aps.Id,
+            ServiceId = aps.ServiceId,
+            Service = aps.Service != null ? new ServiceDTO
+            {
+                Id = aps.Service.Id,
+                Name = aps.Service.Name,
+                Price = aps.Service.Price
+            } : null
+        }).ToList()
+    });
+});
+
+
+
+app.MapGet("/api/services", (HillaryHairCareDbContext db)=> {
+   return db.Services.Select(s => new ServiceDTO
+   {
+    Id = s.Id,
+    Name =s.Name,
+    Price = s.Price
+   }
+   ).ToList();
+});
+
+
+
+
+
 
 
 

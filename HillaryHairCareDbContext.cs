@@ -23,6 +23,10 @@ public class HillaryHairCareDbContext : DbContext
         .HasKey(aps => new { aps.AppointmentId, aps.ServiceId });
 
         modelBuilder.Entity<AppointmentService>()
+        .Property(aps => aps.Id) // Explicitly configure Id as auto-increment
+        .ValueGeneratedOnAdd(); // Ensure auto-incrementing behavior
+
+        modelBuilder.Entity<AppointmentService>()
         .HasOne(aps => aps.Appointment)
         .WithMany(a => a.AppointmentServices)
         .HasForeignKey(aps => aps.AppointmentId);
@@ -72,14 +76,15 @@ public class HillaryHairCareDbContext : DbContext
         });
 
 
-        modelBuilder.Entity<AppointmentService>().HasData(
-        new AppointmentService { AppointmentId = 1, ServiceId = 1 }, // Appointment 1 has Haircut
-        new AppointmentService { AppointmentId = 1, ServiceId = 3 }, // Appointment 1 also has Beard Trim
-        new AppointmentService { AppointmentId = 2, ServiceId = 2 }, // Appointment 2 has Hair Coloring
-        new AppointmentService { AppointmentId = 3, ServiceId = 1 }, // Appointment 3 has Haircut
-        new AppointmentService { AppointmentId = 4, ServiceId = 4 }, // Appointment 4 has Blow Dry and Style
-        new AppointmentService { AppointmentId = 5, ServiceId = 1 }  // Appointment 5 has Haircut
-        );
+       modelBuilder.Entity<AppointmentService>().HasData(
+        new AppointmentService { Id = 1, AppointmentId = 1, ServiceId = 1 }, // Appointment 1 has Haircut
+        new AppointmentService { Id = 2, AppointmentId = 1, ServiceId = 3 }, // Appointment 1 also has Beard Trim
+        new AppointmentService { Id = 3, AppointmentId = 2, ServiceId = 2 }, // Appointment 2 has Hair Coloring
+        new AppointmentService { Id = 4, AppointmentId = 3, ServiceId = 1 }, // Appointment 3 has Haircut
+        new AppointmentService { Id = 5, AppointmentId = 4, ServiceId = 4 }, // Appointment 4 has Blow Dry and Style
+        new AppointmentService { Id = 6, AppointmentId = 5, ServiceId = 1 }  // Appointment 5 has Haircut
+);
+
 
 
          

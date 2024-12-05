@@ -11,7 +11,9 @@ export const NavBar = () => {
         <li>
           <Link to={'/stylists'}>Stylists</Link>
         </li>
-        <li>Book Appointment</li>
+        <li>
+          <Link to={'/appointments/book'}>Book Appointment</Link>
+        </li>
         <li>
           <Link to={'/appointments'}>Appointments</Link>
         </li>

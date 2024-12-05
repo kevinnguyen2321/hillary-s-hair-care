@@ -6,5 +6,7 @@ SELECT * FROM "Appointments"
 
 SELECT * FROM "Stylists"
 
+SELECT * FROM "AppointmentServices"
+
 
 
