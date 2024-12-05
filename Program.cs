@@ -268,18 +268,16 @@ app.MapPut("/api/appointments/{id}/cancel", (HillaryHairCareDbContext db, int id
   db.SaveChanges();
 
   return Results.NoContent();
-
-
 });
 
 
+app.MapPost("/api/customers", (HillaryHairCareDbContext db, Customer customer)=> {
+  db.Customers.Add(customer);
+  db.SaveChanges();
 
+  return Results.Created($"/api/customers/{customer.Id}", customer);
 
-
-
-
-
-
+});
 
 
 
